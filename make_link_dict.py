@@ -1,7 +1,7 @@
 import json
 
 link_list = []
-with open('drug_link.json', 'r', encoding='utf-8') as file:
+with open('drugs_link.json', 'r', encoding='utf-8') as file:
     for drug in file:
         test = drug.split('\n')
         link_list.append(test[0].replace(',', ''))
@@ -13,4 +13,4 @@ for i, link in enumerate(link_list):
     except:
         pass
 
-print(link_list)
+print(type(link_list[1]))
