@@ -1,6 +1,6 @@
 import json
 
-with open('scrapyTest/drugs_info.json', 'r', encoding='utf-8') as drugs_file:
+with open('scrapyTest/drugs_detail.json', 'r', encoding='utf-8') as drugs_file:
     drugs_file = json.loads(drugs_file.read())
 
 # print(type(drugs_file[0]))
@@ -30,6 +30,9 @@ with open('insurances/niro_mosalah.json', 'r', encoding='utf-8') as niro_mosalah
 for i, drug in enumerate(drugs_file):
     try:
         temp = drugs_file[i]['price']
+        if temp == '':
+            temp = 0
+
         drugs_file[i]['price'] = []
 
         for j, tamin_drug in enumerate(tamin_file):
@@ -62,12 +65,12 @@ for i, drug in enumerate(drugs_file):
 
         if len(drugs_file[i]['price']) == 0:
             drugs_file[i]['price'].append(int(temp))
+
         # print(drugs_file[i]['price'])
         # print(drugs_file[i]['generic_code'])
     except:
         pass
 
 # print(drugs_file[0])
-with open('drug_complete_data.json', 'w', encoding='utf-8') as file:
-    file.write(json.dumps(drugs_file))
-
+with open(file='drug_complete_data.json', mode='w', encoding='utf-8') as file:
+    file.write(json.dumps(drugs_file, ensure_ascii=False))
