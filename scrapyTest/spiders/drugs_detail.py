@@ -7,31 +7,35 @@ class DrugsInfoSpider(scrapy.Spider):
     start_urls = []
     # start_urls = ['https://irc.fda.gov.ir//NFI/Detail/12413']
 
-    link_list = []
-    with open('drugs_link.json', 'r', encoding='utf-8') as file:
-        for drug in file:
-            test = drug.split('\n')
-            link_list.append(test[0].replace(',', ''))
+    with open('scrapyTest/drugs_info.json', 'r', encoding='utf-8') as file:
+        drugs_info = json.loads(file.read())
 
-    for i, link in enumerate(link_list):
-        # print(link)
-        try:
-            link_list[i] = json.loads(link)
-            start_urls.append(str(link_list[i]['drug_link']))
-            # print(link_list[i]['drug_link'])
-        except:
-            pass
-    # counter = -1
+        # print(drugs_info)
+
+        for drug in drugs_info:
+            drug_url = drug['drug_link']
+            start_urls.append(drug_url)
+
+    # for i, link in enumerate(link_list):
+    #     # print(link)
+    #     try:
+    #         link_list[i] = json.loads(link)
+    #         start_urls.append(str(link_list[i]['drug_link']))
+    #         # print(link_list[i]['drug_link'])
+    #     except:
+    #         pass
+    counter = -1
 
     # print('we were here')
     # print(link_list[1]['drug_link'])
     def parse(self, response, **kwargs):
         # for drug in response.css('div.col-lg-12.col-md-12.col-sm-12.col-xs-12.padding0.RowSearchSty'):
-        # self.counter += 1
+        self.counter += 1
         try:
             yield {
                 "drug_name": response.css(
                     'div.col-lg-5.col-md-5.col-sm-6.col-xs-12 span.txtAlignLTR::text').get().strip(),
+                "generic_code": self.drugs_info[self.counter]['generic_code'],
                 "global_name": response.css(
                     "div.col-lg-7.col-md-7.col-sm-12.col-xs-12 bdo.txtAlignLTR::text").get().strip(),
                 "drug_type": response.css("div.col-lg-5.col-md-5.col-sm-6.col-xs-12 span.txtAlignLTR::text")[
